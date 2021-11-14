@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+if [ ! -e venv ]; then
+    python3 -m venv venv
+fi
+
+source venv/bin/activate
+
+usage() {
+    echo "Usage: ./install dev|prod"
+    exit 1
+}
+
+if [ "$#" -ne 1 ]; then
+    usage
+fi
+
+PROFILE=$1
+
+case "$PROFILE" in
+    dev)
+        pip install -U wheel pip setuptools
+        pip install -U -e '.[dev]'
+        ;;
+    prod)
+        pip install -U wheel pip setuptools
+        pip install -U -e '.'
+        ;;
+    *)
+        usage
+        ;;
+esac
